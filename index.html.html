@@ -1,0 +1,4476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Empire Bank & Stock Market — Season 2</title>
+
+<style>
+:root{
+  --bg:#070b16;
+  --panel:#101827;
+  --line:#26344d;
+  --text:#f7f9ff;
+  --muted:#91a0b8;
+  --blue:#2563eb;
+  --green:#16a34a;
+  --red:#dc2626;
+  --purple:#7c3aed;
+  --gold:#a16207;
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:Arial,Segoe UI,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+}
+
+button,input{font:inherit}
+
+button{
+  border:0;
+  border-radius:10px;
+  padding:10px 13px;
+  background:var(--blue);
+  color:#fff;
+  font-weight:800;
+  cursor:pointer;
+}
+
+button:hover{filter:brightness(1.1)}
+button.secondary{background:#334155}
+button.danger{background:var(--red)}
+button.gold{background:var(--gold)}
+button:disabled{opacity:.45;cursor:not-allowed}
+
+input{
+  background:#0b1220;
+  color:white;
+  border:1px solid #334155;
+  border-radius:9px;
+  padding:9px 10px;
+}
+
+.app{
+  min-height:100vh;
+  display:grid;
+  grid-template-columns:250px 1fr;
+}
+
+aside{
+  background:#0b1220;
+  border-right:1px solid var(--line);
+  padding:18px;
+}
+
+.logo{
+  font-size:20px;
+  font-weight:900;
+  line-height:1.1;
+  margin-bottom:15px;
+}
+
+.logo small{
+  font-size:11px;
+  color:#93c5fd;
+}
+
+.nav button{
+  width:100%;
+  text-align:left;
+  background:transparent;
+  color:#cbd5e1;
+  margin:4px 0;
+}
+
+.nav button.active,
+.nav button:hover{
+  background:#172235;
+  color:white;
+}
+
+main{
+  padding:20px;
+  max-width:1500px;
+  width:100%;
+  margin:auto;
+}
+
+.top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-bottom:16px;
+}
+
+.player{
+  display:flex;
+  gap:7px;
+  align-items:center;
+}
+
+.hero{
+  background:linear-gradient(135deg,#101827,#1b2751);
+  border:1px solid #334155;
+  border-radius:18px;
+  padding:20px;
+  margin-bottom:16px;
+}
+
+.muted{color:var(--muted)}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:14px;
+}
+
+.grid2{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:14px;
+}
+
+.grid3{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:14px;
+}
+
+.card{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:15px;
+  padding:16px;
+}
+
+.big{
+  font-size:27px;
+  font-weight:900;
+}
+
+.hidden{display:none!important}
+
+.table-wrap{
+  overflow:auto;
+  border:1px solid var(--line);
+  border-radius:15px;
+  background:var(--panel);
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+}
+
+th,td{
+  padding:11px;
+  border-bottom:1px solid #20304a;
+  text-align:left;
+}
+
+th{
+  color:#93c5fd;
+  font-size:12px;
+}
+
+tr:last-child td{border-bottom:0}
+
+.green{color:#4ade80}
+.red{color:#f87171}
+.purple{color:#c4b5fd}
+
+.feed{
+  max-height:280px;
+  overflow:auto;
+}
+
+.feed-item{
+  padding:9px 0;
+  border-bottom:1px solid #223049;
+}
+
+.statline{
+  display:flex;
+  justify-content:space-between;
+  margin:7px 0;
+}
+
+.event-card{
+  border-color:#6d28d9;
+  background:linear-gradient(135deg,#1d1647,#111827);
+}
+
+.toast{
+  position:fixed;
+  right:18px;
+  bottom:18px;
+  background:#0f172a;
+  border:1px solid #334155;
+  padding:12px 15px;
+  border-radius:10px;
+  z-index:50;
+}
+
+.sell-box{
+  margin-top:10px;
+  display:flex;
+  gap:7px;
+  flex-wrap:wrap;
+}
+
+.sell-box input{width:110px}
+
+.pay-list{
+  max-height:360px;
+  overflow:auto;
+}
+
+.player-row{
+  padding:11px;
+  border:1px solid #26344d;
+  border-radius:10px;
+  margin-bottom:8px;
+  cursor:pointer;
+  background:#0b1220;
+}
+
+.player-row:hover{
+  background:#172235;
+}
+
+@media(max-width:1050px){
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .app{grid-template-columns:200px 1fr}
+}
+
+@media(max-width:720px){
+  .app{grid-template-columns:1fr}
+  aside{position:static}
+  .grid,.grid2,.grid3{grid-template-columns:1fr}
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<aside>
+
+<div class="logo">
+💰 EMPIRE BANK<br>
+& STOCK MARKET<br>
+<small>SEASON 2</small>
+</div>
+
+<div class="nav" id="nav"></div>
+
+</aside>
+
+<main>
+
+<div class="top">
+
+<div>
+<div class="muted">Empire Control Panel</div>
+<h2 id="pageTitle">Dashboard</h2>
+</div>
+
+<div class="player">
+<span class="muted">Player</span>
+<input id="playerName" maxlength="20">
+<button class="secondary" onclick="savePlayer()">Save</button>
+<span id="mpStatus" class="muted" style="font-size:12px">Connecting...</span>
+</div>
+
+</div>
+
+<section id="dashboard"></section>
+<section id="payfriend" class="hidden"></section>
+<section id="bank" class="hidden"></section>
+<section id="stocks" class="hidden"></section>
+<section id="crates" class="hidden"></section>
+<section id="blackhole" class="hidden"></section>
+<section id="factories" class="hidden"></section>
+<section id="coupons" class="hidden"></section>
+<section id="events" class="hidden"></section>
+<section id="auctions" class="hidden"></section>
+<section id="collectibles" class="hidden"></section>
+
+</main>
+</div>
+
+<div id="toastRoot"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+
+/* =========================================================
+   SUPABASE
+   ========================================================= */
+
+const SUPABASE_URL="https://ykrackyahdqeucnpiroz.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY="sb_publishable_KIYLGJxy77iN0L1tsQERxA_JgxHfQUi";
+
+const supabaseClient=supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_PUBLISHABLE_KEY
+);
+
+const SAVE_KEY="empire_bank_s2_full_v1";
+const PLAYER_ID_KEY="empire_bank_player_id_v1";
+
+let multiplayerId=localStorage.getItem(PLAYER_ID_KEY);
+
+if(!multiplayerId){
+  multiplayerId=crypto.randomUUID();
+  localStorage.setItem(PLAYER_ID_KEY,multiplayerId);
+}
+
+let multiplayerChannel=null;
+let multiplayerReady=false;
+let multiplayerSaveTimer=null;
+let applyingRemoteState=false;
+
+function multiplayerStatus(text,ok=false){
+
+  const el=document.getElementById("mpStatus");
+
+  if(el){
+    el.textContent=text;
+    el.style.color=ok?"#4ade80":"#fbbf24";
+  }
+}
+
+/* =========================================================
+   MULTIPLAYER LOAD
+   ========================================================= */
+
+async function loadMultiplayerPlayer(){
+
+  multiplayerStatus("Connecting...");
+
+  const {data,error}=await supabaseClient
+    .from("players")
+    .select("id,username,game_state")
+    .eq("id",multiplayerId)
+    .maybeSingle();
+
+  if(error){
+
+    console.error("SUPABASE ERROR:",error);
+
+    multiplayerStatus(
+      "DB: "+(error.message||"Unknown error")
+    );
+
+    return;
+  }
+
+  if(data && data.game_state){
+
+    try{
+
+      applyingRemoteState=true;
+
+      state=mergeDefaults(data.game_state);
+
+      localStorage.setItem(
+        SAVE_KEY,
+        JSON.stringify(state)
+      );
+
+    }catch(e){
+
+      console.error("Remote state error:",e);
+
+    }finally{
+
+      applyingRemoteState=false;
+
+    }
+
+  }else{
+
+    await pushMultiplayerState();
+
+  }
+
+  multiplayerReady=true;
+
+  multiplayerStatus(
+    "🟢 Multiplayer connected",
+    true
+  );
+
+  if(multiplayerChannel){
+    try{
+      await supabaseClient.removeChannel(multiplayerChannel);
+    }catch(e){}
+  }
+
+  multiplayerChannel=supabaseClient
+    .channel("empire-bank-players")
+
+    .on(
+      "postgres_changes",
+      {
+        event:"*",
+        schema:"public",
+        table:"players"
+      },
+      payload=>{
+
+        if(
+          payload.new &&
+          payload.new.id===multiplayerId &&
+          !applyingRemoteState
+        ){
+
+          if(payload.new.game_state){
+
+            applyingRemoteState=true;
+
+            state=mergeDefaults(
+              payload.new.game_state
+            );
+
+            localStorage.setItem(
+              SAVE_KEY,
+              JSON.stringify(state)
+            );
+
+            renderAll();
+
+            applyingRemoteState=false;
+          }
+        }
+
+        renderOnlinePlayers();
+
+      }
+    )
+
+    .subscribe(status=>{
+
+      console.log("Realtime status:",status);
+
+    });
+
+  renderOnlinePlayers();
+}
+
+/* =========================================================
+   MULTIPLAYER SAVE
+   ========================================================= */
+
+async function pushMultiplayerState(){
+
+  if(applyingRemoteState) return;
+
+  const row={
+    id:multiplayerId,
+    username:state.player || "Noone",
+    game_state:state,
+    updated_at:new Date().toISOString()
+  };
+
+  const {error}=await supabaseClient
+    .from("players")
+    .upsert(
+      row,
+      {onConflict:"id"}
+    );
+
+  if(error){
+
+    console.error(
+      "Multiplayer save failed:",
+      error
+    );
+
+    multiplayerStatus(
+      "DB: "+(error.message||"Save failed")
+    );
+
+  }else{
+
+    multiplayerStatus(
+      "🟢 Multiplayer connected",
+      true
+    );
+
+  }
+}
+
+/*
+   IMPORTANT:
+   There is only ONE save() function in this version.
+   This prevents the old local-only save() from
+   overwriting the multiplayer save().
+*/
+
+function save(){
+
+  localStorage.setItem(
+    SAVE_KEY,
+    JSON.stringify(state)
+  );
+
+  if(
+    multiplayerReady &&
+    !applyingRemoteState
+  ){
+
+    clearTimeout(multiplayerSaveTimer);
+
+    multiplayerSaveTimer=setTimeout(()=>{
+      pushMultiplayerState();
+    },250);
+
+  }
+}
+
+/* =========================================================
+   ONLINE PLAYERS
+   ========================================================= */
+
+async function renderOnlinePlayers(){
+
+  const el=document.getElementById("onlinePlayers");
+
+  if(!el) return;
+
+  const {data,error}=await supabaseClient
+    .from("players")
+    .select("id,username,updated_at")
+    .order("updated_at",{ascending:false})
+    .limit(30);
+
+  if(error){
+
+    console.error("Player list error:",error);
+
+    el.innerHTML=
+      '<span class="muted">Could not load players: '+
+      esc(error.message||"Database error")+
+      '</span>';
+
+    return;
+  }
+
+  const now=Date.now();
+
+  const recent=(data||[]).filter(p=>{
+
+    const t=Date.parse(
+      p.updated_at||""
+    );
+
+    return Number.isFinite(t) &&
+      now-t<120000;
+
+  });
+
+  el.innerHTML=recent.length
+
+    ?recent.map(p=>`
+
+      <div
+        class="player-row"
+        onclick="selectFriend('${esc(p.username||"Noone")}')"
+      >
+
+        <div class="statline">
+
+          <span>
+            ${p.id===multiplayerId?"🟢 ":"👤 "}
+            <b>${esc(p.username||"Noone")}</b>
+          </span>
+
+          <small class="muted">
+            ${p.id===multiplayerId?"You":"Online"}
+          </small>
+
+        </div>
+
+      </div>
+
+    `).join("")
+
+    :
+
+    '<span class="muted">No other active players yet.</span>';
+}
+
+async function startMultiplayer(){
+
+  try{
+
+    await loadMultiplayerPlayer();
+
+  }catch(e){
+
+    console.error(e);
+
+    multiplayerStatus(
+      "⚠️ Connection failed"
+    );
+
+  }
+
+}
+
+/* =========================================================
+   GAME DATA
+   ========================================================= */
+
+const MARKETS=[
+
+{name:"USA",flag:"🇺🇸",rank:1,risk:"Medium",vip:"Gold",price:1200000},
+{name:"China",flag:"🇨🇳",rank:2,risk:"High",vip:"Gold",price:1100000},
+{name:"Russia",flag:"🇷🇺",rank:8,risk:"High",vip:"Silver",price:800000},
+{name:"Japan",flag:"🇯🇵",rank:4,risk:"Low",vip:"Gold",price:1050000},
+{name:"Germany",flag:"🇩🇪",rank:5,risk:"Low",vip:"Gold",price:980000},
+{name:"United Kingdom",flag:"🇬🇧",rank:6,risk:"Medium",vip:"Gold",price:1000000},
+{name:"Made in India",flag:"🇮🇳",rank:3,risk:"Medium",vip:"Platinum",price:1350000},
+{name:"South Korea",flag:"🇰🇷",rank:7,risk:"Medium",vip:"Silver",price:930000},
+{name:"North Korea",flag:"🇰🇵",rank:18,risk:"Extreme",vip:"None",price:450000},
+{name:"UAE",flag:"🇦🇪",rank:10,risk:"Medium",vip:"Gold",price:1250000},
+{name:"Singapore",flag:"🇸🇬",rank:9,risk:"Low",vip:"Gold",price:1150000},
+{name:"Brazil",flag:"🇧🇷",rank:12,risk:"High",vip:"Silver",price:760000},
+{name:"Canada",flag:"🇨🇦",rank:11,risk:"Low",vip:"Silver",price:920000},
+{name:"Australia",flag:"🇦🇺",rank:13,risk:"Medium",vip:"Silver",price:870000},
+{name:"France",flag:"🇫🇷",rank:14,risk:"Medium",vip:"Silver",price:830000},
+{name:"Saudi Arabia",flag:"🇸🇦",rank:15,risk:"High",vip:"Gold",price:890000},
+{name:"Iceland",flag:"🇮🇸",rank:17,risk:"Low",vip:"None",price:620000},
+{name:"Global Economy",flag:"🌍",rank:16,risk:"Medium",vip:"Platinum",price:1500000}
+
+];
+
+const FACTORIES={
+
+"Electronics Factory":{income:8000000,price:100000000,icon:"⚡"},
+"Car Factory":{income:10000000,price:125000000,icon:"🚗"},
+"Steel Factory":{income:12000000,price:150000000,icon:"🏗️"},
+"Computer Factory":{income:18000000,price:225000000,icon:"💻"},
+"AI Chip Factory":{income:25000000,price:350000000,icon:"🤖"},
+"Space Technology Factory":{income:50000000,price:600000000,icon:"🚀"},
+"Void Machine Factory":{income:20000000,price:800000000,icon:"🏭"}
+
+};
+
+const CRATES={
+
+Common:{
+  price:50000,
+  icon:"🟤",
+  rewards:["Coal","Poop"]
+},
+
+Uncommon:{
+  price:100000,
+  icon:"🟢",
+  rewards:["Diamond"]
+},
+
+Rare:{
+  price:1000000,
+  icon:"🔵",
+  rewards:["Rare Cosmetic"]
+},
+
+Epic:{
+  price:5000000,
+  icon:"🟣",
+  rewards:["Pink Ruby","Rare Cosmetic"]
+},
+
+Legendary:{
+  price:10000000,
+  icon:"🟡",
+  rewards:["Hyper Gold Brick","Legend Mace"]
+},
+
+Mythic:{
+  price:1000000000,
+  icon:"👑",
+  rewards:["Mythic Cosmetic","5 Hyper Gold Bricks"]
+}
+
+};
+
+const BLACK_HOLE_INVESTMENTS=[
+"⛏️ Black Hole Mining",
+"🌀 Voidness",
+"🎯 Black Hole Target",
+"🌑 Black Hole",
+"🚀 Go Inside Black Hole"
+];
+
+const AUCTION_ITEMS=[
+
+{name:"AI Chip Factory",price:300000000,type:"factory"},
+{name:"Rare Collectible",price:25000000,type:"ruby"},
+{name:"Black Hole Item",price:50000000,type:"item"},
+{name:"Rare Cosmetic",price:15000000,type:"cosmetic"},
+{name:"Bedrock",price:5000000,type:"item"}
+
+];
+
+const COLLECTIBLE_SELL_PRICES={
+
+Coal:"RANDOM_500_1000",
+Ruby:500000,
+"Gold Brick":500000,
+"Hyper Gold Brick":20000000,
+"Pink Ruby":6000000,
+"Void Matter":5000000
+
+};
+
+/* =========================================================
+   STATE
+   ========================================================= */
+
+function freshState(){
+
+return{
+
+player:"Noone",
+
+cash:5000000,
+
+bank:0,
+
+bankFee:0.01,
+
+loan:{
+amount:0,
+balance:0,
+lastPayment:0,
+totalPaid:0
+},
+
+stats:{
+days:0,
+investments:0,
+crates:0,
+auctions:0
+},
+
+inventory:{
+Coal:0,
+Mace:0,
+Poop:0,
+Diamond:0,
+"Netherite Bar":0,
+Bedrock:0
+},
+
+collectibles:{
+Coal:0,
+Diamond:0,
+Ruby:0,
+"Gold Brick":0,
+"Hyper Gold Brick":0,
+"Pink Ruby":0,
+"Void Matter":0
+},
+
+cosmetics:[
+"Starter Style"
+],
+
+factories:{},
+
+shares:{},
+
+marketValues:{},
+
+news:[
+
+{
+text:"📰 Welcome to Empire Bank & Stock Market — Season 2!",
+time:new Date().toLocaleTimeString()
+},
+
+{
+text:"💰 Build your empire. Invest. Build. Trade. Risk.",
+time:new Date().toLocaleTimeString()
+}
+
+],
+
+coupons:{},
+
+events:{
+christmas:false,
+blackHole:false,
+blackHoleEnds:0
+},
+
+roles:{
+builderShip:false,
+ceo:false
+},
+
+lastDaily:Date.now(),
+
+auctionBids:
+AUCTION_ITEMS.map(x=>x.price),
+
+auctionWinners:[]
+
+};
+
+}
+
+let state=load();
+
+function load(){
+
+try{
+
+const x=JSON.parse(
+localStorage.getItem(SAVE_KEY)
+);
+
+return x
+  ?mergeDefaults(x)
+  :freshState();
+
+}catch{
+
+return freshState();
+
+}
+
+}
+
+function mergeDefaults(x){
+
+const d=freshState();
+
+const out={
+
+...d,
+...x,
+
+loan:{
+...d.loan,
+...(x.loan||{})
+},
+
+stats:{
+...d.stats,
+...(x.stats||{})
+},
+
+inventory:{
+...d.inventory,
+...(x.inventory||{})
+},
+
+collectibles:{
+...d.collectibles,
+...(x.collectibles||{})
+},
+
+roles:{
+...d.roles,
+...(x.roles||{})
+},
+
+events:{
+...d.events,
+...(x.events||{})
+},
+
+factories:{
+...(x.factories||{})
+},
+
+shares:{
+...(x.shares||{})
+},
+
+marketValues:{
+...(x.marketValues||{})
+},
+
+coupons:{
+...(x.coupons||{})
+},
+
+news:Array.isArray(x.news)
+  ?x.news
+  :d.news,
+
+auctionBids:Array.isArray(x.auctionBids)
+  ?x.auctionBids
+  :d.auctionBids,
+
+auctionWinners:Array.isArray(x.auctionWinners)
+  ?x.auctionWinners
+  :[]
+
+};
+
+if((out.inventory.Coal||0)>0){
+
+out.collectibles.Coal+=
+(out.inventory.Coal||0);
+
+out.inventory.Coal=0;
+
+}
+
+if((out.inventory.Diamond||0)>0){
+
+out.collectibles.Diamond+=
+(out.inventory.Diamond||0);
+
+out.inventory.Diamond=0;
+
+}
+
+out.loan=out.loan||{};
+out.loan.amount=Math.max(0,Number(out.loan.amount)||0);
+out.loan.balance=Math.max(0,Number(out.loan.balance)||0);
+out.loan.lastPayment=Math.max(0,Number(out.loan.lastPayment)||0);
+out.loan.totalPaid=Math.max(0,Number(out.loan.totalPaid)||0);
+
+return out;
+
+}
+
+/* =========================================================
+   HELPERS
+   ========================================================= */
+
+function money(n){
+
+return new Intl.NumberFormat(
+"en-US",
+{
+maximumFractionDigits:0
+}
+).format(
+Math.max(0,Math.floor(n))
+)+"💵";
+
+}
+
+function compact(n){
+
+if(n>=1e9)
+return(n/1e9).toFixed(2)+"B";
+
+if(n>=1e6)
+return(n/1e6).toFixed(1)+"M";
+
+if(n>=1e3)
+return(n/1e3).toFixed(1)+"K";
+
+return Math.floor(n).toString();
+
+}
+
+function toast(msg){
+
+const r=
+document.getElementById(
+"toastRoot"
+);
+
+r.innerHTML=
+`<div class="toast">${msg}</div>`;
+
+setTimeout(
+()=>r.innerHTML="",
+2200
+);
+
+}
+
+function news(text){
+
+state.news.unshift({
+
+text:text,
+time:new Date().toLocaleTimeString()
+
+});
+
+state.news=
+state.news.slice(0,25);
+
+save();
+
+}
+
+function esc(s){
+
+return String(s).replace(
+/[&<>"']/g,
+c=>({
+
+"&":"&amp;",
+"<":"&lt;",
+">":"&gt;",
+'"':"&quot;",
+"'":"&#39;"
+
+}[c])
+
+);
+
+}
+
+/* =========================================================
+   ADMIN
+   ========================================================= */
+
+const ADMIN_NAME="YugIADMINSTOR";
+
+function playerOdds(){
+
+const p=
+state.player
+.trim()
+.toLowerCase();
+
+if(
+p==="aruu"||
+p==="shiv"
+){
+
+return{
+loss:70,
+profit:30
+};
+
+}
+
+return{
+loss:55,
+profit:45
+};
+
+}
+
+function isAdmin(){
+
+return state.player
+.trim()
+.toLowerCase()===
+ADMIN_NAME.toLowerCase();
+
+}
+
+function adminSetCash(){
+
+if(!isAdmin())
+return toast("⛔ Admin only.");
+
+const amount=
+Number(
+prompt("💰 Enter new cash amount:")
+);
+
+if(
+!Number.isFinite(amount)||
+amount<0
+)
+return toast("Invalid amount.");
+
+state.cash=amount;
+
+save();
+
+renderAll();
+
+toast(
+"✅ Cash set to "+
+money(amount)
+);
+
+}
+
+/* =========================================================
+   FACTORIES / WEALTH
+   ========================================================= */
+
+function totalFactoryIncome(){
+
+return Object.entries(
+state.factories
+).reduce(
+(a,[k,q])=>
+a+
+(FACTORIES[k]?.income||0)*q,
+0
+);
+
+}
+
+function totalFactoryValue(){
+
+return Object.entries(
+state.factories
+).reduce(
+(a,[k,q])=>
+a+
+(FACTORIES[k]?.price||0)*q,
+0
+);
+
+}
+
+function wealth(){
+
+let total=
+state.cash+
+state.bank;
+
+total+=
+Object.entries(
+state.shares
+).reduce(
+(a,[m,q])=>{
+
+const market=
+MARKETS.find(
+x=>x.name===m
+);
+
+return a+
+(
+state.marketValues[m]||
+market?.price||
+0
+)*q;
+
+},
+0
+);
+
+total+=
+totalFactoryValue();
+
+total+=
+Object.values(
+state.collectibles
+).reduce(
+(a,b)=>a+b*1000000,
+0
+);
+
+total+=
+Object.values(
+state.inventory
+).reduce(
+(a,b)=>a+b*100000,
+0
+);
+
+total+=
+state.cosmetics.length*
+500000;
+
+return total;
+
+}
+
+function dailyTotal(){
+
+return totalFactoryIncome();
+
+}
+
+function processDaily(){
+
+const now=Date.now();
+
+const day=86400000;
+
+if(
+now-state.lastDaily<day
+){
+return;
+}
+
+const days=
+Math.floor(
+(now-state.lastDaily)/day
+);
+
+const income=
+dailyTotal()*days;
+
+if(income>0){
+
+news(
+"🏦 Daily income received: "+
+money(income)+
+" ("+
+days+
+" game day"+
+(days>1?"s":"")+
+")."
+);
+
+state.cash+=income;
+
+}
+
+state.stats.days+=days;
+
+state.lastDaily+=
+days*day;
+
+save();
+
+}
+
+/* =========================================================
+   PAGES
+   ========================================================= */
+
+const PAGES=[
+
+["dashboard","🏠 Dashboard"],
+["payfriend","💸 Pay Friend"],
+["bank","🏦 Bank"],
+["stocks","📈 Stock Market"],
+["crates","🎁 Crates"],
+["blackhole","🌑 Black Hole"],
+["factories","🏭 Factories"],
+["coupons","🎟️ Coupons"],
+["events","🎅 Events"],
+["auctions","🏛️ Auctions"],
+["collectibles","💎 Collectibles"]
+
+];
+
+function buildNav(){
+
+document.getElementById(
+"nav"
+).innerHTML=
+
+PAGES.map(
+(p,i)=>
+
+`<button
+class="${i===0?"active":""}"
+onclick="showPage('${p[0]}',this)">
+${p[1]}
+</button>`
+
+).join("");
+
+}
+
+function showPage(id,btn){
+
+document.querySelectorAll(
+"main section"
+)
+.forEach(
+s=>s.classList.add("hidden")
+);
+
+document.getElementById(id)
+.classList.remove("hidden");
+
+const page=
+PAGES.find(
+p=>p[0]===id
+);
+
+document.getElementById(
+"pageTitle"
+).textContent=
+page
+? page[1]
+: id;
+
+document.querySelectorAll(
+"#nav button"
+)
+.forEach(
+b=>b.classList.remove("active")
+);
+
+if(btn){
+btn.classList.add("active");
+}
+
+renderAll();
+
+}
+
+/* =========================================================
+   DASHBOARD
+   ========================================================= */
+
+function renderDashboard(){
+
+processDaily();
+
+const income=
+dailyTotal();
+
+document.getElementById(
+"dashboard"
+).innerHTML=
+
+`
+
+<div class="hero">
+
+<h1>
+💰 Welcome, ${esc(state.player)}!
+</h1>
+
+<p class="muted">
+Build the biggest empire possible.
+Estimated empire wealth:
+<b>${money(wealth())}</b>.
+</p>
+
+</div>
+
+<div class="grid">
+
+<div class="card">
+<h3>💵 Cash</h3>
+<div class="big">${money(state.cash)}</div>
+</div>
+
+<div class="card">
+<h3>🏦 Bank</h3>
+<div class="big">${money(state.bank)}</div>
+</div>
+
+<div class="card">
+<h3>🏭 Income / Day</h3>
+<div class="big">${compact(income)}</div>
+</div>
+
+<div class="card">
+<h3>👑 Total Wealth</h3>
+<div class="big">${compact(wealth())}</div>
+</div>
+
+</div>
+
+<div class="grid2" style="margin-top:16px">
+
+<div class="card">
+
+<h3>🌐 Multiplayer</h3>
+
+<div id="onlinePlayers">
+<span class="muted">
+Connecting to players...
+</span>
+</div>
+
+<p class="muted" style="margin-bottom:0">
+Click a player to pay them from the Pay Friend page.
+</p>
+
+</div>
+
+<div class="card">
+
+<h3>🔗 Player ID</h3>
+
+<p class="muted"
+style="word-break:break-all">
+${esc(multiplayerId)}
+</p>
+
+<p class="muted">
+This browser has its own player account.
+</p>
+
+</div>
+
+</div>
+
+<div class="grid2" style="margin-top:16px">
+
+<div class="card">
+
+<h3>📊 Player Stats</h3>
+
+<div class="statline">
+<span>Game Days</span>
+<b>${state.stats.days}</b>
+</div>
+
+<div class="statline">
+<span>Investments</span>
+<b>${state.stats.investments}</b>
+</div>
+
+<div class="statline">
+<span>Crates Opened</span>
+<b>${state.stats.crates}</b>
+</div>
+
+<div class="statline">
+<span>Auctions Won</span>
+<b>${state.stats.auctions}</b>
+</div>
+
+<div class="statline">
+<span>Factories</span>
+<b>
+${Object.values(state.factories)
+.reduce((a,b)=>a+b,0)}
+</b>
+</div>
+
+</div>
+
+<div class="card">
+
+<h3>📰 News</h3>
+
+<div class="feed">
+
+${state.news.map(n=>
+
+`<div class="feed-item">
+<div>${esc(n.text)}</div>
+<small class="muted">
+${esc(n.time)}
+</small>
+</div>`
+
+).join("")}
+
+</div>
+
+</div>
+
+</div>
+
+${isAdmin()?`
+
+<div class="card"
+style="margin-top:16px;border-color:#dc2626">
+
+<h3>🔐 ADMIN CONTROL</h3>
+
+<p class="muted">
+Admin account: ${esc(ADMIN_NAME)}
+</p>
+
+<button
+class="danger"
+onclick="adminSetCash()">
+💰 Change Cash
+</button>
+
+</div>
+
+`:""}
+
+`;
+
+}
+
+/* =========================================================
+   PAY FRIEND — REAL SUPABASE PLAYER TRANSFER
+   ========================================================= */
+
+function renderPayFriend(){
+
+document.getElementById(
+"payfriend"
+).innerHTML=
+
+`
+
+<div class="grid2">
+
+<div class="card">
+
+<h2>💸 Pay a Friend</h2>
+
+<p class="muted">
+Send cash directly to another player
+in your Empire Bank game.
+</p>
+
+<label class="muted">
+Friend's player name
+</label>
+
+<br><br>
+
+<input
+id="friendName"
+maxlength="20"
+placeholder="Example: Shiv"
+style="width:100%"
+>
+
+<br><br>
+
+<label class="muted">
+Amount
+</label>
+
+<br><br>
+
+<input
+id="friendAmount"
+type="number"
+min="1"
+step="1"
+placeholder="Amount"
+style="width:100%"
+>
+
+<br><br>
+
+<button
+style="width:100%"
+onclick="sendMoneyToFriend()">
+💸 Send Money
+</button>
+
+<p>
+Your cash:
+<b>${money(state.cash)}</b>
+</p>
+
+<p class="muted">
+The other player's account is updated in Supabase.
+</p>
+
+</div>
+
+<div class="card">
+
+<h2>👥 Players</h2>
+
+<p class="muted">
+Click a player name to put it into
+the payment box.
+</p>
+
+<div id="payPlayerList"
+class="pay-list">
+
+<span class="muted">
+Loading players...
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+`;
+
+renderPayPlayerList();
+
+}
+
+function selectFriend(name){
+
+const input=
+document.getElementById(
+"friendName"
+);
+
+if(input){
+
+input.value=name;
+
+toast(
+"👤 Selected "+name
+);
+
+}
+
+}
+
+async function renderPayPlayerList(){
+
+const el=
+document.getElementById(
+"payPlayerList"
+);
+
+if(!el) return;
+
+const {data,error}=
+await supabaseClient
+.from("players")
+.select(
+"id,username,updated_at"
+)
+.order(
+"updated_at",
+{ascending:false}
+)
+.limit(50);
+
+if(error){
+
+console.error(
+"Pay player list error:",
+error
+);
+
+el.innerHTML=
+`<span class="muted">
+Could not load players:<br>
+${esc(error.message||"Database error")}
+</span>`;
+
+return;
+
+}
+
+const players=(data||[])
+.filter(
+p=>p.id!==multiplayerId
+);
+
+if(!players.length){
+
+el.innerHTML=
+`<span class="muted">
+No other players found yet.
+Open this game in another browser/device
+and save a different player name.
+</span>`;
+
+return;
+
+}
+
+el.innerHTML=
+players.map(p=>`
+
+<div
+class="player-row"
+onclick="selectFriend('${esc(p.username||"Noone")}')"
+>
+
+<div class="statline">
+
+<span>
+👤 <b>
+${esc(p.username||"Noone")}
+</b>
+</span>
+
+<small class="muted">
+Select
+</small>
+
+</div>
+
+</div>
+
+`).join("");
+
+}
+
+async function sendMoneyToFriend(){
+
+  if(!multiplayerReady){
+    return toast("⏳ Multiplayer is not connected yet.");
+  }
+
+  const friendInput=document.getElementById("friendName");
+  const amountInput=document.getElementById("friendAmount");
+
+  const friendName=(friendInput?.value||"").trim();
+  const amount=Math.floor(Number(amountInput?.value));
+
+  if(!friendName){
+    return toast("Enter your friend's player name.");
+  }
+
+  if(!Number.isFinite(amount)||amount<=0){
+    return toast("Enter a valid amount.");
+  }
+
+  if(amount>state.cash){
+    return toast("❌ You don't have enough cash.");
+  }
+
+  if(friendName.toLowerCase()===state.player.trim().toLowerCase()){
+    return toast("❌ You cannot pay yourself.");
+  }
+
+  multiplayerStatus("Finding player...");
+
+  /*
+    IMPORTANT:
+    We do NOT remove the sender's money until the receiver
+    has successfully been updated.
+  */
+
+  const {data:players,error:findError}=await supabaseClient
+    .from("players")
+    .select("id,username,game_state")
+    .ilike("username",friendName)
+    .limit(10);
+
+  if(findError){
+    console.error("Find receiver error:",findError);
+    multiplayerStatus("🟢 Multiplayer connected",true);
+    return toast("❌ Database error: "+(findError.message||"Unknown error"));
+  }
+
+  const receiver=(players||[]).find(
+    p=>String(p.username||"").trim().toLowerCase()===friendName.toLowerCase()
+  );
+
+  if(!receiver){
+    multiplayerStatus("🟢 Multiplayer connected",true);
+    return toast("❌ Player '"+friendName+"' was not found.");
+  }
+
+  if(receiver.id===multiplayerId){
+    multiplayerStatus("🟢 Multiplayer connected",true);
+    return toast("❌ You cannot pay yourself.");
+  }
+
+  const receiverState=mergeDefaults(receiver.game_state||{});
+  receiverState.cash=Math.max(0,Number(receiverState.cash)||0);
+
+  receiverState.cash+=amount;
+
+  receiverState.news=Array.isArray(receiverState.news)
+    ?receiverState.news
+    :[];
+
+  receiverState.news.unshift({
+    text:"💸 You received "+money(amount)+" from "+state.player+"!",
+    time:new Date().toLocaleTimeString()
+  });
+
+  receiverState.news=receiverState.news.slice(0,25);
+
+  multiplayerStatus("Sending money...");
+
+  /*
+    Update receiver FIRST.
+    If this fails, sender loses NOTHING.
+  */
+
+  const {data:updatedReceiver,error:receiverError}=await supabaseClient
+    .from("players")
+    .update({
+      game_state:receiverState,
+      updated_at:new Date().toISOString()
+    })
+    .eq("id",receiver.id)
+    .select("id,username,game_state")
+    .single();
+
+  if(receiverError){
+    console.error("Receiver update error:",receiverError);
+    multiplayerStatus("🟢 Multiplayer connected",true);
+    return toast("❌ Money was NOT taken. Receiver update failed.");
+  }
+
+  /*
+    Receiver was successfully updated.
+    NOW remove money from sender and save sender.
+  */
+
+  state.cash-=amount;
+
+  state.news.unshift({
+    text:"💸 You sent "+money(amount)+" to "+receiver.username+".",
+    time:new Date().toLocaleTimeString()
+  });
+
+  state.news=state.news.slice(0,25);
+
+  const {error:senderError}=await supabaseClient
+    .from("players")
+    .update({
+      username:state.player||"Noone",
+      game_state:state,
+      updated_at:new Date().toISOString()
+    })
+    .eq("id",multiplayerId);
+
+  if(senderError){
+
+    /*
+      Sender save failed after receiver was paid.
+      Try to undo the receiver payment so money isn't duplicated.
+    */
+
+    const rollbackState=mergeDefaults(
+      updatedReceiver.game_state||{}
+    );
+
+    rollbackState.cash=Math.max(
+      0,
+      (Number(rollbackState.cash)||0)-amount
+    );
+
+    rollbackState.news=Array.isArray(rollbackState.news)
+      ?rollbackState.news
+      :[];
+
+    rollbackState.news.unshift({
+      text:"↩️ Payment from "+state.player+" was cancelled.",
+      time:new Date().toLocaleTimeString()
+    });
+
+    await supabaseClient
+      .from("players")
+      .update({
+        game_state:rollbackState,
+        updated_at:new Date().toISOString()
+      })
+      .eq("id",receiver.id);
+
+    state.cash+=amount;
+
+    console.error("Sender update error:",senderError);
+    multiplayerStatus("🟢 Multiplayer connected",true);
+
+    return toast("❌ Payment failed. Your money was restored.");
+  }
+
+  localStorage.setItem(
+    SAVE_KEY,
+    JSON.stringify(state)
+  );
+
+  multiplayerStatus("🟢 Multiplayer connected",true);
+
+  if(friendInput)friendInput.value="";
+  if(amountInput)amountInput.value="";
+
+  renderAll();
+  renderOnlinePlayers();
+  renderPayPlayerList();
+
+  toast(
+    "✅ Sent "+money(amount)+" to "+receiver.username+"!"
+  );
+}
+
+/* =========================================================
+   BANK
+   ========================================================= */
+
+function renderBank(){
+
+document.getElementById(
+"bank"
+).innerHTML=
+
+`
+
+<div class="grid2">
+
+<div class="card">
+
+<h3>🏦 Deposit Money</h3>
+
+<p class="muted">
+Bank fee:
+${(state.bankFee*100).toFixed(1)}%
+</p>
+
+<input
+id="depAmount"
+type="number"
+min="1"
+placeholder="Amount"
+>
+
+<button onclick="deposit()">
+Deposit
+</button>
+
+<p>
+Bank balance:
+<b>${money(state.bank)}</b>
+</p>
+
+</div>
+
+<div class="card">
+
+<h3>💸 Withdraw Money</h3>
+
+<input
+id="wdAmount"
+type="number"
+min="1"
+placeholder="Amount"
+>
+
+<button onclick="withdraw()">
+Withdraw
+</button>
+
+<p>
+Cash balance:
+<b>${money(state.cash)}</b>
+</p>
+
+</div>
+
+</div>
+
+<div style="margin-top:16px">
+${loanPanelHTML()}
+</div>
+
+`;
+
+}
+
+function deposit(){
+
+const n=
+Number(
+document.getElementById(
+"depAmount"
+).value
+);
+
+if(
+!n||
+n<=0||
+n>state.cash
+){
+
+return toast(
+"Invalid deposit."
+);
+
+}
+
+const fee=
+n*state.bankFee;
+
+state.cash-=
+n+fee;
+
+state.bank+=n;
+
+news(
+"🏦 "+
+state.player+
+" deposited "+
+money(n)+
+". Fee: "+
+money(fee)
+);
+
+save();
+
+renderAll();
+
+}
+
+function withdraw(){
+
+const n=
+Number(
+document.getElementById(
+"wdAmount"
+).value
+);
+
+if(
+!n||
+n<=0||
+n>state.bank
+){
+
+return toast(
+"Invalid withdrawal."
+);
+
+}
+
+const fee=
+n*state.bankFee;
+
+state.bank-=n;
+
+state.cash+=
+n-fee;
+
+news(
+"💸 "+
+state.player+
+" withdrew "+
+money(n)+
+". Fee: "+
+money(fee)
+);
+
+save();
+
+renderAll();
+
+}
+
+/* =========================================================
+   LOANS
+   ========================================================= */
+
+const MAX_LOAN=100000000000;
+const MIN_LOAN=1;
+const LOAN_RATE=0.05;
+const LOAN_INTERVAL=3600000;
+
+function activeLoan(){
+return Number(state.loan?.balance||0)>0;
+}
+
+function loanPaymentAmount(){
+const balance=Math.max(0,Number(state.loan?.balance)||0);
+if(balance<=0)return 0;
+return Math.max(1,Math.ceil(balance*LOAN_RATE));
+}
+
+function formatDuration(ms){
+ms=Math.max(0,Math.floor(ms));
+const totalSeconds=Math.ceil(ms/1000);
+const hours=Math.floor(totalSeconds/3600);
+const minutes=Math.floor((totalSeconds%3600)/60);
+const seconds=totalSeconds%60;
+if(hours>0)return hours+"h "+minutes+"m "+seconds+"s";
+return minutes+"m "+seconds+"s";
+}
+
+function processLoanPayments(){
+if(!activeLoan())return;
+
+if(!state.loan.lastPayment){
+state.loan.lastPayment=Date.now();
+save();
+return;
+}
+
+const now=Date.now();
+const elapsed=now-state.loan.lastPayment;
+if(elapsed<LOAN_INTERVAL)return;
+
+const hours=Math.floor(elapsed/LOAN_INTERVAL);
+state.loan.lastPayment+=hours*LOAN_INTERVAL;
+
+let changed=false;
+
+for(let i=0;i<hours && activeLoan();i++){
+const payment=loanPaymentAmount();
+const bankAvailable=Math.max(0,Number(state.bank)||0);
+const taken=Math.min(payment,bankAvailable);
+
+if(taken>0){
+state.bank-=taken;
+state.loan.balance=Math.max(0,state.loan.balance-taken);
+state.loan.totalPaid=(Number(state.loan.totalPaid)||0)+taken;
+changed=true;
+
+news(
+"🏦 Loan payment: "+money(taken)+
+" was taken from your bank. Remaining debt: "+
+ money(state.loan.balance)+"."
+);
+}
+
+if(taken<payment){
+news(
+"⚠️ Loan payment due: "+money(payment)+
+". Your bank only had "+money(taken)+
+" available. The remaining debt stays active."
+);
+changed=true;
+}
+
+if(state.loan.balance<=0){
+state.loan.balance=0;
+state.loan.amount=0;
+state.loan.lastPayment=0;
+news("🎉 Loan fully repaid! You can borrow again.");
+break;
+}
+}
+
+if(changed)save();
+}
+
+function borrowLoan(){
+processLoanPayments();
+
+if(activeLoan()){
+return toast("❌ You already have an active loan. Repay it first.");
+}
+
+const input=document.getElementById("loanAmount");
+const amount=Math.floor(Number(input?.value));
+
+if(!Number.isFinite(amount)||amount<MIN_LOAN){
+return toast("Enter a valid loan amount.");
+}
+
+if(amount>MAX_LOAN){
+return toast("❌ Maximum loan is "+money(MAX_LOAN)+".");
+}
+
+state.cash+=amount;
+state.loan.amount=amount;
+state.loan.balance=amount;
+state.loan.lastPayment=Date.now();
+state.loan.totalPaid=0;
+
+news(
+"💳 "+state.player+" borrowed "+money(amount)+
+". 5% of the remaining debt is taken from the bank every hour."
+);
+
+save();
+renderAll();
+toast("💳 Loan approved: "+money(amount));
+}
+
+function repayLoan(){
+processLoanPayments();
+
+if(!activeLoan()){
+return toast("✅ You have no active loan.");
+}
+
+const input=document.getElementById("repayAmount");
+const amount=Math.floor(Number(input?.value));
+
+if(!Number.isFinite(amount)||amount<=0){
+return toast("Enter a valid repayment amount.");
+}
+
+if(amount>state.bank){
+return toast("❌ You don't have enough money in your bank.");
+}
+
+const payment=Math.min(amount,state.loan.balance);
+state.bank-=payment;
+state.loan.balance-=payment;
+state.loan.totalPaid=(Number(state.loan.totalPaid)||0)+payment;
+
+if(state.loan.balance<=0){
+state.loan.balance=0;
+state.loan.amount=0;
+state.loan.lastPayment=0;
+news("🎉 "+state.player+" fully repaid their loan!");
+toast("🎉 Loan fully repaid!");
+}else{
+news(
+"💸 "+state.player+" manually repaid "+money(payment)+
+". Remaining debt: "+money(state.loan.balance)+"."
+);
+toast("💸 Repaid "+money(payment)+".");
+}
+
+save();
+renderAll();
+}
+
+function repayAllLoan(){
+processLoanPayments();
+
+if(!activeLoan()){
+return toast("✅ You have no active loan.");
+}
+
+const available=Math.max(0,Number(state.bank)||0);
+if(available<=0){
+return toast("❌ Your bank is empty.");
+}
+
+const payment=Math.min(available,state.loan.balance);
+state.bank-=payment;
+state.loan.balance-=payment;
+state.loan.totalPaid=(Number(state.loan.totalPaid)||0)+payment;
+
+if(state.loan.balance<=0){
+state.loan.balance=0;
+state.loan.amount=0;
+state.loan.lastPayment=0;
+news("🎉 "+state.player+" fully repaid their loan!");
+toast("🎉 Loan fully repaid!");
+}else{
+news(
+"💸 "+state.player+" repaid "+money(payment)+
+". Remaining debt: "+money(state.loan.balance)+"."
+);
+toast("💸 Paid as much as possible from your bank.");
+}
+
+save();
+renderAll();
+}
+
+function loanPanelHTML(){
+processLoanPayments();
+
+const hasLoan=activeLoan();
+const balance=hasLoan?state.loan.balance:0;
+const payment=hasLoan?loanPaymentAmount():0;
+const last=Number(state.loan?.lastPayment)||0;
+const nextPayment=hasLoan&&last
+?Math.max(0,last+LOAN_INTERVAL-Date.now())
+:0;
+
+const percentPaid=hasLoan&&state.loan.amount>0
+?Math.min(100,Math.max(0,((state.loan.amount-balance)/state.loan.amount)*100))
+:0;
+
+return `
+
+<div class="hero">
+<h2>💳 Empire Bank Loans</h2>
+<p class="muted">
+Borrow money to build your empire. You can have <b>ONLY ONE</b> active loan at a time.
+</p>
+</div>
+
+${!hasLoan?`
+<div class="grid2">
+
+<div class="card">
+<h3>💰 Borrow Money</h3>
+<p class="muted">Choose any amount from ${money(MIN_LOAN)} up to ${money(MAX_LOAN)}.</p>
+
+<input
+id="loanAmount"
+type="number"
+min="1"
+max="${MAX_LOAN}"
+step="1"
+placeholder="Enter loan amount"
+style="width:100%"
+>
+<br><br>
+
+<button class="gold" onclick="borrowLoan()" style="width:100%">
+💳 Take Loan
+</button>
+
+<p class="muted" style="margin-bottom:0">
+5% of the remaining debt is automatically taken from your bank every hour.
+</p>
+</div>
+
+<div class="card">
+<h3>📜 Loan Rules</h3>
+<div class="statline"><span>Minimum</span><b>${money(MIN_LOAN)}</b></div>
+<div class="statline"><span>Maximum</span><b>${money(MAX_LOAN)}</b></div>
+<div class="statline"><span>Active loans</span><b>1 maximum</b></div>
+<div class="statline"><span>Hourly payment</span><b>5%</b></div>
+<div class="statline"><span>Payment source</span><b>🏦 Bank</b></div>
+</div>
+
+</div>
+`:`
+<div class="grid2">
+
+<div class="card">
+<h3>💳 Active Loan</h3>
+<div class="big">${money(balance)}</div>
+<p class="muted">Remaining debt</p>
+
+<div class="statline">
+<span>Original loan</span>
+<b>${money(state.loan.amount)}</b>
+</div>
+<div class="statline">
+<span>Next hourly payment</span>
+<b>${money(payment)}</b>
+</div>
+<div class="statline">
+<span>Paid so far</span>
+<b>${money(state.loan.totalPaid||0)}</b>
+</div>
+<div class="statline">
+<span>Next payment</span>
+<b>${formatDuration(nextPayment)}</b>
+</div>
+
+<div style="margin-top:14px;background:#0b1220;border-radius:10px;overflow:hidden;height:12px">
+<div style="width:${percentPaid}%;height:100%;background:#16a34a"></div>
+</div>
+<p class="muted">${percentPaid.toFixed(1)}% repaid</p>
+</div>
+
+<div class="card">
+<h3>💸 Repay Loan</h3>
+<p class="muted">Money is taken from your bank.</p>
+<p>Bank balance: <b>${money(state.bank)}</b></p>
+
+<input
+id="repayAmount"
+type="number"
+min="1"
+max="${Math.floor(state.bank)}"
+step="1"
+placeholder="Amount to repay"
+style="width:100%"
+>
+<br><br>
+
+<button onclick="repayLoan()" style="width:100%">
+💸 Give Back Loan
+</button>
+<br><br>
+<button class="secondary" onclick="repayAllLoan()" style="width:100%">
+🏦 Give Back All From Bank
+</button>
+
+<p class="muted" style="margin-bottom:0">
+You cannot take another loan until this debt reaches ${money(0)}.
+</p>
+</div>
+
+</div>
+`}
+
+<div class="card" style="margin-top:16px">
+<h3>⚠️ Important</h3>
+<p class="muted">
+If your bank does not contain enough money when the hourly payment is due,
+whatever is available is taken and the remaining debt stays active.
+</p>
+</div>
+`;
+}
+
+
+function renderLoans(){
+processLoanPayments();
+}
+
+/* =========================================================
+   STOCK MARKET
+   ========================================================= */
+
+function marketPrice(m){
+
+if(
+state.marketValues[m.name]==null
+){
+
+state.marketValues[m.name]=
+m.price;
+
+}
+
+return state.marketValues[m.name];
+
+}
+
+function trendIcon(m){
+
+const p=
+marketPrice(m);
+
+if(
+p>m.price*1.03
+){
+
+return"📈";
+
+}
+
+if(
+p<m.price*.97
+){
+
+return"📉";
+
+}
+
+return"➡️";
+
+}
+
+function renderStocks(){
+
+const odds=
+playerOdds();
+
+const rows=
+MARKETS.map(m=>{
+
+const p=
+marketPrice(m);
+
+const qty=
+state.shares[m.name]||0;
+
+return`
+
+<tr>
+
+<td>
+${m.flag}
+<b>${esc(m.name)}</b>
+</td>
+
+<td>#${m.rank}</td>
+
+<td>${esc(m.vip)}</td>
+
+<td>${trendIcon(m)}</td>
+
+<td>${esc(m.risk)}</td>
+
+<td>${money(p)}</td>
+
+<td>${qty}</td>
+
+<td>
+
+<button
+onclick="buyShare('${esc(m.name)}')">
+Buy
+</button>
+
+<button
+class="secondary"
+onclick="sellShare('${esc(m.name)}')">
+Sell
+</button>
+
+</td>
+
+</tr>
+
+`;
+
+}).join("");
+
+document.getElementById(
+"stocks"
+).innerHTML=
+
+`
+
+<div class="hero">
+
+<h2>📈 Stock Market</h2>
+
+<p>
+🎲 ${esc(state.player)} odds:
+<span class="red">
+${odds.loss}% Lose
+</span>
+/
+<span class="green">
+${odds.profit}% Profit
+</span>
+</p>
+
+<button
+class="gold"
+onclick="runMarketInvestment()">
+🎲 Run $1M Investment
+</button>
+
+</div>
+
+<div class="table-wrap">
+
+<table>
+
+<thead>
+
+<tr>
+<th>Market</th>
+<th>Rank</th>
+<th>VIP</th>
+<th>Trend</th>
+<th>Risk</th>
+<th>Price</th>
+<th>Owned</th>
+<th>Action</th>
+</tr>
+
+</thead>
+
+<tbody>
+${rows}
+</tbody>
+
+</table>
+
+</div>
+
+`;
+
+}
+
+function moveMarkets(){
+
+MARKETS.forEach(m=>{
+
+const p=
+marketPrice(m);
+
+const swing=
+(Math.random()*.16)-.08;
+
+state.marketValues[m.name]=
+Math.max(
+25000,
+p*(1+swing)
+);
+
+});
+
+save();
+
+}
+
+function buyShare(name){
+
+const m=
+MARKETS.find(
+x=>x.name===name
+);
+
+if(!m)
+return toast("Stock not found.");
+
+const p=
+marketPrice(m);
+
+if(
+state.cash<p
+){
+
+return toast(
+"Not enough cash."
+);
+
+}
+
+state.cash-=p;
+
+state.shares[name]=
+(state.shares[name]||0)+1;
+
+state.stats.investments++;
+
+save();
+
+toast(
+"📈 Bought 1 share."
+);
+
+renderAll();
+
+}
+
+function sellShare(name){
+
+const qty=
+state.shares[name]||0;
+
+if(qty<=0){
+
+return toast(
+"❌ You don't own this stock."
+);
+
+}
+
+const m=
+MARKETS.find(
+x=>x.name===name
+);
+
+if(!m){
+
+return toast(
+"❌ Stock not found."
+);
+
+}
+
+const price=
+Math.floor(
+marketPrice(m)
+);
+
+state.cash+=price;
+
+state.shares[name]=
+qty-1;
+
+save();
+
+toast(
+"💰 SOLD 1 "+
+name+
+" FOR "+
+money(price)
+);
+
+renderAll();
+
+}
+
+function runMarketInvestment(){
+
+const cost=1000000;
+
+if(
+state.cash<cost
+){
+
+return toast(
+"Need $1M."
+);
+
+}
+
+state.cash-=cost;
+
+state.stats.investments++;
+
+const odds=
+playerOdds();
+
+const win=
+Math.random()*100<
+odds.profit;
+
+const amount=
+win
+?cost*1.5
+:cost*.25;
+
+state.cash+=amount;
+
+moveMarkets();
+
+news(
+"📈 "+
+state.player+
+" ran a $1M investment: "+
+(win?"PROFIT":"LOSS")
+);
+
+toast(
+win
+?"🟢 PROFIT!"
+:"🔴 LOSS!"
+);
+
+renderAll();
+
+}
+
+/* =========================================================
+   CRATES
+   ========================================================= */
+
+function renderCrates(){
+
+document.getElementById(
+"crates"
+).innerHTML=
+
+`
+
+<div class="grid3">
+
+${Object.entries(CRATES).map(
+([name,c])=>
+
+`
+
+<div class="card">
+
+<h3>
+${c.icon} ${name}
+</h3>
+
+<div class="big">
+${compact(c.price)}
+</div>
+
+<p class="muted">
+${c.rewards.join(" • ")}
+</p>
+
+<button
+onclick="openCrate('${name}')">
+Open
+</button>
+
+</div>
+
+`
+
+).join("")}
+
+</div>
+
+`;
+
+}
+
+function openCrate(name){
+
+const c=
+CRATES[name];
+
+if(!c){
+
+return toast(
+"Unknown crate."
+);
+
+}
+
+if(
+state.cash<c.price
+){
+
+return toast(
+"Not enough cash."
+);
+
+}
+
+state.cash-=c.price;
+
+state.stats.crates++;
+
+const r=
+c.rewards[
+Math.floor(
+Math.random()*
+c.rewards.length
+)
+];
+
+/* Coal */
+
+if(r==="Coal"){
+
+state.collectibles.Coal+=1;
+
+}
+
+/* Diamond */
+
+else if(r==="Diamond"){
+
+state.collectibles.Diamond+=1;
+
+}
+
+/* Pink Ruby */
+
+else if(r==="Pink Ruby"){
+
+state.collectibles["Pink Ruby"]+=1;
+
+}
+
+/* Rare Cosmetic */
+
+else if(r==="Rare Cosmetic"){
+
+const cosmetics=[
+
+"🌌 Galaxy Aura",
+"🪽 Dragon Wings",
+"🎄 Santa Hat",
+"🍭 Holiday Cosmetics",
+"🌑 Black Hole Aura"
+
+];
+
+const cosmetic=
+cosmetics[
+Math.floor(
+Math.random()*
+cosmetics.length
+)
+];
+
+state.cosmetics.push(
+cosmetic
+);
+
+news(
+"👑 Rare Cosmetic won: "+
+cosmetic
+);
+
+}
+
+/* Mythic Cosmetic */
+
+else if(r==="Mythic Cosmetic"){
+
+state.cosmetics.push(
+"👑 Mythic Cosmetic"
+);
+
+news(
+"👑 "+
+state.player+
+" won the MYTHIC COSMETIC!"
+);
+
+}
+
+/* 2 Rubies */
+
+else if(r==="2 Rubies"){
+
+state.collectibles.Ruby+=2;
+
+}
+
+/* 2 Hyper Gold Bricks */
+
+else if(r==="2 Hyper Gold Bricks"){
+
+state.collectibles["Hyper Gold Brick"]+=2;
+
+}
+
+/* Hyper Gold Brick */
+
+else if(r==="Hyper Gold Brick"){
+
+state.collectibles["Hyper Gold Brick"]+=1;
+
+news(
+"✨ "+
+state.player+
+" won 1 Hyper Gold Brick!"
+);
+
+}
+
+/* 5 Hyper Gold Bricks */
+
+else if(r==="5 Hyper Gold Bricks"){
+
+state.collectibles["Hyper Gold Brick"]+=5;
+
+news(
+"✨ "+
+state.player+
+" won 5 Hyper Gold Bricks!"
+);
+
+}
+
+/* Legend Mace */
+
+else if(r==="Legend Mace"){
+
+state.inventory["Legend Mace"]=
+(state.inventory["Legend Mace"]||0)+1;
+
+news(
+"🔨 "+
+state.player+
+" won a Legend Mace!"
+);
+
+}
+
+/* Rare Factory */
+
+else if(r==="Rare Factory"){
+
+const names=
+Object.keys(FACTORIES);
+
+const f=
+names[
+Math.floor(
+Math.random()*names.length
+)
+];
+
+state.factories[f]=
+(state.factories[f]||0)+1;
+
+news(
+"🏭 Mythic reward: "+f
+);
+
+}
+
+save();
+
+toast(
+"🎁 Reward: "+r
+);
+
+renderAll();
+
+}
+
+/* =========================================================
+   BLACK HOLE
+   ========================================================= */
+
+function renderBlackHole(){
+
+const active=
+state.events.blackHole&&
+Date.now()<
+state.events.blackHoleEnds;
+
+const left=
+active
+?Math.ceil(
+(state.events.blackHoleEnds-Date.now())/1000
+)
+:0;
+
+document.getElementById(
+"blackhole"
+).innerHTML=
+
+`
+
+<div class="hero event-card">
+
+<h2>🌑 Black Hole Event</h2>
+
+<p>
+
+${
+active
+?
+`<b class="purple">
+ACTIVE
+</b> — ${left}s`
+:
+`<span class="muted">
+OFF
+</span>`
+}
+
+</p>
+
+<p>
+🎲 Odds:
+<span class="red">
+66.7% Loss
+</span>
+/
+<span class="green">
+33.3% Profit
+</span>
+</p>
+
+</div>
+
+<div class="grid3">
+
+${BLACK_HOLE_INVESTMENTS.map(x=>
+
+`
+
+<div class="card">
+
+<h3>${x}</h3>
+
+<p>
+Investment: <b>5M</b>
+</p>
+
+<button
+${active?"":"disabled"}
+onclick="blackHoleInvest('${esc(x)}')">
+Invest
+</button>
+
+</div>
+
+`
+
+).join("")}
+
+</div>
+
+<div class="grid2" style="margin-top:16px">
+
+<div class="card">
+
+<h3>🌑 Black Hole Crate</h3>
+
+<p>
+Cost: <b>5 Void Matter</b>
+</p>
+
+<p>
+One reward only:
+🏭 Void Machine Factory
+OR
+👑 Rarest Cosmetic
+</p>
+
+<button
+${
+active&&
+state.collectibles["Void Matter"]>=5
+?
+""
+:
+"disabled"
+}
+onclick="openBHCrate()">
+Open
+</button>
+
+</div>
+
+<div class="card">
+
+<h3>🪨 Void Matter</h3>
+
+<div class="big">
+${state.collectibles["Void Matter"]}
+</div>
+
+<p>
+Sell value:
+<b>
+${money(
+COLLECTIBLE_SELL_PRICES["Void Matter"]
+)}
+</b>
+each
+</p>
+
+</div>
+
+</div>
+
+`;
+
+}
+
+function blackHoleInvest(label){
+
+const cost=5000000;
+
+if(
+state.cash<cost
+){
+
+return toast(
+"Need 5M."
+);
+
+}
+
+if(
+!state.events.blackHole||
+Date.now()>=state.events.blackHoleEnds
+){
+
+return toast(
+"Event is not active."
+);
+
+}
+
+state.cash-=cost;
+
+const win=
+Math.random()<.333;
+
+if(win){
+
+state.cash+=
+cost*2;
+
+}
+
+news(
+"🌑 "+
+state.player+
+" "+
+(win?"profited":"lost")+
+" 5M in "+
+label+
+"."
+);
+
+toast(
+win
+?"🟢 BLACK HOLE PROFIT!"
+:"🔴 BLACK HOLE LOSS!"
+);
+
+save();
+
+renderAll();
+
+}
+
+function openBHCrate(){
+
+if(
+state.collectibles["Void Matter"]<5
+){
+
+return toast(
+"Need 5 Void Matter."
+);
+
+}
+
+state.collectibles["Void Matter"]-=5;
+
+if(
+Math.random()<.5
+){
+
+state.factories[
+"Void Machine Factory"
+]=
+(state.factories[
+"Void Machine Factory"
+]||0)+1;
+
+news(
+"🏭 Void Machine Factory won!"
+);
+
+toast(
+"🏭 Void Machine Factory!"
+);
+
+}
+
+else{
+
+state.cosmetics.push(
+"🌑 Rarest Black Hole Cosmetic"
+);
+
+news(
+"👑 Rarest Cosmetic won!"
+);
+
+toast(
+"👑 Rarest Cosmetic!"
+);
+
+}
+
+save();
+
+renderAll();
+
+}
+
+/* =========================================================
+   FACTORIES
+   ========================================================= */
+
+function renderFactories(){
+
+document.getElementById(
+"factories"
+).innerHTML=
+
+`
+
+<div class="grid3">
+
+${Object.entries(FACTORIES).map(
+([name,f])=>
+
+`
+
+<div class="card">
+
+<h3>
+${f.icon} ${name}
+</h3>
+
+<div class="big">
+${compact(f.income)}/day
+</div>
+
+<p>
+Price: ${compact(f.price)}
+</p>
+
+<p>
+Owned:
+<b>
+${state.factories[name]||0}
+</b>
+</p>
+
+<button
+onclick="buyFactory('${esc(name)}')">
+Buy
+</button>
+
+</div>
+
+`
+
+).join("")}
+
+</div>
+
+<div class="card"
+style="margin-top:16px">
+
+<h3>
+🏭 Total Factory Income
+</h3>
+
+<div class="big">
+${money(totalFactoryIncome())}/day
+</div>
+
+</div>
+
+`;
+
+}
+
+function buyFactory(name){
+
+const f=
+FACTORIES[name];
+
+if(
+state.cash<f.price
+){
+
+return toast(
+"Not enough cash."
+);
+
+}
+
+state.cash-=f.price;
+
+state.factories[name]=
+(state.factories[name]||0)+1;
+
+news(
+"🏭 "+
+state.player+
+" bought "+
+name+"."
+);
+
+save();
+
+renderAll();
+
+}
+
+/* =========================================================
+   EXAMS
+   ========================================================= */
+
+function askQuestions(
+title,
+qs,
+answers,
+fee
+){
+
+if(fee>0){
+
+if(
+state.cash<fee
+){
+
+toast(
+"Not enough money for exam."
+);
+
+return null;
+
+}
+
+state.cash-=fee;
+
+}
+
+let score=0;
+
+for(
+let i=0;
+i<qs.length;
+i++
+){
+
+const a=
+prompt(
+title+
+"\n\nQuestion "+
+(i+1)+
+"/"+
+qs.length+
+"\n"+
+qs[i]+
+"\n\nYour answer:"
+);
+
+if(
+a &&
+a.trim().toLowerCase()===
+answers[i].toLowerCase()
+){
+
+score++;
+
+}
+
+}
+
+return score;
+
+}
+
+function shipExam(){
+
+const qs=[
+
+"What is the owner daily income?",
+"How many questions are on the exam?",
+"What score is required?",
+"Who controls the game's economy?",
+"Is Builder the same as Builder Ship Owner?"
+
+];
+
+const ans=[
+
+"75M/day",
+"5",
+"4/5",
+"Bank",
+"No"
+
+];
+
+const score=
+askQuestions(
+"🚢 Builder Ship Owner Exam",
+qs,
+ans,
+5000000
+);
+
+if(score===null){
+return;
+}
+
+if(score>=4){
+
+state.roles.builderShip=true;
+
+news(
+"🚢 "+
+state.player+
+" became Builder Ship Owner."
+);
+
+toast(
+"🎉 Passed!"
+);
+
+}
+
+else{
+
+toast(
+"Exam result: "+
+score+
+"/5"
+);
+
+}
+
+save();
+
+renderAll();
+
+}
+
+function ceoExam(){
+
+const age=
+Number(
+prompt(
+"🏢 Enter your age:"
+)
+);
+
+if(
+!age||
+age<12
+){
+
+return toast(
+"CEO requires age 12+."
+);
+
+}
+
+const qs=[
+
+"What is CEO salary?",
+"How many questions?",
+"Required score?",
+"Who controls the market?",
+"Minimum age?",
+"Who runs auctions?",
+"Do cosmetics mainly provide financial power?",
+"What is the main goal?",
+"Which season?",
+"Can factories generate passive income?"
+
+];
+
+const ans=[
+
+"75M/day",
+"10",
+"8/10",
+"Bank",
+"12",
+"Bank",
+"No",
+"Become the richest player",
+"Season 2",
+"Yes"
+
+];
+
+const score=
+askQuestions(
+"🏢 CEO Exam",
+qs,
+ans,
+0
+);
+
+if(score>=8){
+
+state.roles.ceo=true;
+
+news(
+"🏢 "+
+state.player+
+" became CEO."
+);
+
+toast(
+"🎉 CEO unlocked!"
+);
+
+}
+
+else{
+
+toast(
+"Exam result: "+
+score+
+"/10"
+);
+
+}
+
+save();
+
+renderAll();
+
+}
+
+/* =========================================================
+   COUPONS
+   ========================================================= */
+
+function renderCoupons(){
+
+document.getElementById(
+"coupons"
+).innerHTML=
+
+`
+
+<div class="card">
+
+<h3>
+🎟️ Season 2 Coupons
+</h3>
+
+<p>
+Valid:
+<b>Season2</b>
+and
+<b>S2</b>
+</p>
+
+<input
+id="couponInput"
+placeholder="Enter coupon"
+>
+
+<button
+onclick="redeemCoupon()">
+Redeem
+</button>
+
+</div>
+
+`;
+
+}
+
+function redeemCoupon(){
+
+const code=
+document.getElementById(
+"couponInput"
+)
+.value
+.trim()
+.toLowerCase();
+
+if(
+code!=="season2"&&
+code!=="s2"&&
+code!=="yugking"
+){
+
+return toast(
+"Invalid coupon."
+);
+
+}
+
+if(
+state.coupons[code]
+){
+
+return toast(
+"Already redeemed."
+);
+
+}
+
+state.coupons[code]=true;
+
+if(code==="yugking"){
+
+state.cash+=1000000000;
+
+news(
+"👑 "+
+state.player+
+" redeemed YugKing and received 1B!"
+);
+
+save();
+
+renderAll();
+
+return toast(
+"👑 YUGKING! +1B💵"
+);
+
+}
+
+state.cash+=10000000;
+
+state.cosmetics.push(
+"🎟️ Season 2 Coupon Cosmetic"
+);
+
+news(
+"🎟️ "+
+state.player+
+" redeemed "+
+code+"."
+);
+
+save();
+
+renderAll();
+
+toast(
+"🎁 Reward received!"
+);
+
+}
+
+/* =========================================================
+   EVENTS
+   ========================================================= */
+
+function renderEvents(){
+
+document.getElementById(
+"events"
+).innerHTML=
+
+`
+
+<div class="grid2">
+
+<div class="card">
+
+<h3>
+🎄 Christmas Event
+</h3>
+
+<p>
+Status:
+<b>
+${state.events.christmas
+?"ACTIVE"
+:"OFF"}
+</b>
+</p>
+
+<button onclick="toggleChristmas()">
+
+${
+state.events.christmas
+?"Disable"
+:"Enable"
+}
+
+</button>
+
+</div>
+
+<div class="card">
+
+<h3>
+🌑 Black Hole
+</h3>
+
+<p>
+Temporary event with five investments
+and a special crate.
+</p>
+
+<button
+onclick="startBlackHole()">
+Start 1 Hour
+</button>
+
+</div>
+
+</div>
+
+`;
+
+}
+
+function toggleChristmas(){
+
+state.events.christmas=
+!state.events.christmas;
+
+news(
+"🎄 Christmas Event "+
+(
+state.events.christmas
+?"started"
+:"ended"
+)+
+"."
+);
+
+save();
+
+renderAll();
+
+}
+
+function startBlackHole(){
+
+state.events.blackHole=true;
+
+state.events.blackHoleEnds=
+Date.now()+3600000;
+
+news(
+"🌑 BLACK HOLE EVENT STARTED — 1 HOUR"
+);
+
+save();
+
+renderAll();
+
+toast(
+"🌑 Black Hole Event started!"
+);
+
+}
+
+/* =========================================================
+   AUCTIONS
+   ========================================================= */
+
+function renderAuctions(){
+
+const rows=
+AUCTION_ITEMS.map(
+(x,i)=>{
+
+const current=
+state.auctionBids[i]||
+x.price;
+
+return`
+
+<tr>
+
+<td>
+${esc(x.name)}
+</td>
+
+<td>
+${money(current)}
+</td>
+
+<td>
+
+<button
+onclick="bidAuction(${i})">
+Bid +10%
+</button>
+
+</td>
+
+<td>
+${esc(
+state.auctionWinners[i]||
+"Open"
+)}
+</td>
+
+</tr>
+
+`;
+
+}
+).join("");
+
+document.getElementById(
+"auctions"
+).innerHTML=
+
+`
+
+<div class="hero">
+
+<h2>🏛️ Auctions</h2>
+
+<p>
+Bank auctions rare items.
+</p>
+
+<button
+class="gold"
+onclick="resolveAuctions()">
+🏆 Resolve Auctions
+</button>
+
+</div>
+
+<div class="table-wrap">
+
+<table>
+
+<thead>
+
+<tr>
+<th>Item</th>
+<th>Current Bid</th>
+<th>Action</th>
+<th>Winner</th>
+</tr>
+
+</thead>
+
+<tbody>
+${rows}
+</tbody>
+
+</table>
+
+</div>
+
+`;
+
+}
+
+function bidAuction(i){
+
+const next=
+Math.ceil(
+(
+state.auctionBids[i]||
+AUCTION_ITEMS[i].price
+)*1.1
+);
+
+if(
+state.cash<next
+){
+
+return toast(
+"Not enough cash."
+);
+
+}
+
+state.cash-=next;
+
+state.bank+=next;
+
+state.auctionBids[i]=next;
+
+state.auctionWinners[i]=
+state.player;
+
+state.stats.auctions++;
+
+news(
+"🏛️ "+
+state.player+
+" bid "+
+money(next)+
+" on "+
+AUCTION_ITEMS[i].name
+);
+
+save();
+
+renderAll();
+
+toast(
+"Bid placed."
+);
+
+}
+
+function resolveAuctions(){
+
+AUCTION_ITEMS.forEach(
+(x,i)=>{
+
+if(
+state.auctionWinners[i]!==state.player
+){
+return;
+}
+
+if(x.type==="factory"){
+
+state.factories[x.name]=
+(state.factories[x.name]||0)+1;
+
+}
+
+else if(x.type==="ruby"){
+
+state.collectibles.Ruby+=1;
+
+}
+
+else if(x.type==="cosmetic"){
+
+state.cosmetics.push(
+"👑 Rare Cosmetic"
+);
+
+}
+
+else{
+
+state.inventory[x.name]=
+(state.inventory[x.name]||0)+1;
+
+}
+
+}
+);
+
+state.auctionBids=
+AUCTION_ITEMS.map(
+x=>x.price
+);
+
+state.auctionWinners=[];
+
+news(
+"🏛️ Auctions resolved."
+);
+
+save();
+
+renderAll();
+
+toast(
+"🏆 Auction resolved!"
+);
+
+}
+
+/* =========================================================
+   COLLECTIBLES
+   ========================================================= */
+
+function sellCollectible(
+item,
+amount
+){
+
+amount=Number(amount);
+
+if(
+!Number.isInteger(amount)||
+amount<=0
+){
+
+return toast(
+"Enter a valid amount."
+);
+
+}
+
+const owned=
+state.collectibles[item]||0;
+
+if(
+owned<amount
+){
+
+return toast(
+"Not enough "+item+"."
+);
+
+}
+
+const priceRule=
+COLLECTIBLE_SELL_PRICES[item];
+
+if(priceRule==null){
+
+return toast(
+item+" cannot be sold yet."
+);
+
+}
+
+let total;
+
+let displayPrice;
+
+if(
+priceRule==="RANDOM_500_1000"
+){
+
+const price=
+500+
+Math.floor(
+Math.random()*501
+);
+
+total=
+price*amount;
+
+displayPrice=price;
+
+}
+
+else{
+
+total=
+priceRule*amount;
+
+displayPrice=
+priceRule;
+
+}
+
+state.collectibles[item]=
+owned-amount;
+
+state.cash+=total;
+
+news(
+"💰 "+
+state.player+
+" sold "+
+amount+
+" "+
+item+
+" for "+
+money(total)+
+" ("+
+money(displayPrice)+
+" each)."
+);
+
+save();
+
+renderAll();
+
+toast(
+"💵 Sold "+
+amount+
+" "+
+item+
+" for "+
+money(total)
+);
+
+}
+
+function renderCollectibles(){
+
+const c=
+state.collectibles;
+
+const box=
+(
+key,
+label,
+icon,
+inputId
+)=>{
+
+const rule=
+COLLECTIBLE_SELL_PRICES[key];
+
+let sellText=
+"Not sellable";
+
+if(
+rule==="RANDOM_500_1000"
+){
+
+sellText=
+"500–1,000 each";
+
+}
+
+else if(
+typeof rule==="number"
+){
+
+sellText=
+money(rule)+
+" each";
+
+}
+
+return`
+
+<div class="card">
+
+<h3>
+${icon} ${label}
+</h3>
+
+<div class="big">
+${c[key]||0}
+</div>
+
+<p>
+Sell value:
+<b>${sellText}</b>
+</p>
+
+${
+rule!=null
+?
+
+`
+
+<div class="sell-box">
+
+<input
+id="${inputId}"
+type="number"
+min="1"
+placeholder="Amount"
+>
+
+<button
+onclick="sellCollectible(
+'${key}',
+document.getElementById(
+'${inputId}'
+).value
+)">
+Sell
+</button>
+
+</div>
+
+`
+
+:
+
+`<p class="muted">
+This collectible cannot be sold yet.
+</p>`
+
+}
+
+</div>
+
+`;
+
+};
+
+document.getElementById(
+"collectibles"
+).innerHTML=
+
+`
+
+<div class="grid">
+
+${box(
+"Coal",
+"Coal",
+"⬛",
+"sellCoal"
+)}
+
+${box(
+"Diamond",
+"Diamond",
+"💎",
+"sellDiamond"
+)}
+
+${box(
+"Ruby",
+"Rubies",
+"💎",
+"sellRuby"
+)}
+
+${box(
+"Gold Brick",
+"Gold Bricks",
+"🟨",
+"sellGold"
+)}
+
+</div>
+
+<div class="grid"
+style="margin-top:16px">
+
+${box(
+"Hyper Gold Brick",
+"Hyper Gold Bricks",
+"✨",
+"sellHyperGold"
+)}
+
+${box(
+"Pink Ruby",
+"Pink Rubies",
+"💗",
+"sellPink"
+)}
+
+${box(
+"Void Matter",
+"Void Matter",
+"🪨",
+"sellVoid"
+)}
+
+<div class="card">
+
+<h3>
+📦 Collectible Info
+</h3>
+
+<p class="muted">
+Coal sells for a random 500–1,000 per unit.
+Diamond is collectible-only until a sell value is assigned.
+</p>
+
+</div>
+
+</div>
+
+<div class="grid2"
+style="margin-top:16px">
+
+<div class="card">
+
+<h3>
+🔄 Approved Merge
+</h3>
+
+<p>
+💎 1 Ruby + 1 Ruby → 🪨 Coal
+</p>
+
+<button onclick="mergeRuby()">
+Merge
+</button>
+
+</div>
+
+<div class="card">
+
+<h3>
+🎨 Cosmetics
+</h3>
+
+<p>
+${
+state.cosmetics
+.map(esc)
+.join(" • ")
+||"None"
+}
+</p>
+
+</div>
+
+</div>
+
+<div class="card"
+style="margin-top:16px">
+
+<h3>
+🎒 Inventory
+</h3>
+
+<p>
+${
+Object.entries(
+state.inventory
+)
+.map(
+([k,v])=>
+`${esc(k)} × ${v}`
+)
+.join(" • ")
+||"Empty"
+}
+</p>
+
+</div>
+
+`;
+
+}
+
+function mergeRuby(){
+
+if(
+state.collectibles.Ruby<2
+){
+
+return toast(
+"Need 2 Rubies."
+);
+
+}
+
+state.collectibles.Ruby-=2;
+
+state.inventory.Coal=
+(state.inventory.Coal||0)+1;
+
+news(
+"🔄 "+
+state.player+
+" merged 2 Rubies into Coal."
+);
+
+save();
+
+renderAll();
+
+toast(
+"Merge successful."
+);
+
+}
+
+/* =========================================================
+   PLAYER
+   ========================================================= */
+
+function savePlayer(){
+
+const n=
+document.getElementById(
+"playerName"
+)
+.value
+.trim();
+
+if(!n){
+
+return toast(
+"Enter a player name."
+);
+
+}
+
+state.player=n;
+
+save();
+
+if(multiplayerReady){
+
+pushMultiplayerState();
+
+}
+
+renderAll();
+
+renderOnlinePlayers();
+
+toast(
+"Saved player: "+
+n
+);
+
+}
+
+function resetGame(){
+
+if(
+!confirm(
+"Reset your local Season 2 game?"
+)
+){
+
+return;
+
+}
+
+state=freshState();
+
+save();
+
+renderAll();
+
+toast(
+"Game reset."
+);
+
+}
+
+/* =========================================================
+   RENDER ALL
+   ========================================================= */
+
+function renderAll(){
+
+processDaily();
+
+document.getElementById(
+"playerName"
+).value=
+state.player;
+
+renderDashboard();
+renderPayFriend();
+renderBank();
+renderStocks();
+renderCrates();
+renderBlackHole();
+renderFactories();
+renderCoupons();
+renderEvents();
+renderAuctions();
+renderCollectibles();
+
+}
+
+/* =========================================================
+   START
+   ========================================================= */
+
+buildNav();
+
+renderAll();
+
+startMultiplayer();
+
+setInterval(()=>{
+
+  if(multiplayerReady){
+
+    renderOnlinePlayers();
+    renderPayPlayerList();
+
+  }
+
+  processLoanPayments();
+  renderBlackHole();
+  renderEvents();
+    renderDashboard();
+
+},1000);
+
+</script>
+
+</body>
+</html>
+
